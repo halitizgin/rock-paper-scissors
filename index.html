@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Taş Kağıt Makas Client</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script>
+        const socket = io.connect("http://localhost:3000/");
+        const isim = prompt("İsmini gir!");
+        $(() => {
+            $('button').on('click', () => {
+                socket.emit('mesajGonder', { name: isim, message: $('#message').val() });
+                $('#chat').append("<div><span class='name'>" + isim + ": </span><span class='message'>" + $('#message').val() + "</span> </div>");
+                $('#message').val("");
+            });
+
+            socket.on('mesajCanli', (data) => {
+                $('#chat').append("<div><span class='name'>" + data.name + ": </span><span class='message'>" + data.message + "</span> </div>");
+            });
+        });
+    </script>
+    <style>
+        #chat div{
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #ccc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        #chat div span.name{
+            font-weight: bold;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+    Merhaba Client
+    <br/>
+    <div id="chat">
+
+    </div>
+    <br/>
+    <input type="text" id="message">
+    <button>Selam</button>
+</body>
+</html>
