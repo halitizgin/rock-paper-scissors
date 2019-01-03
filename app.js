@@ -16,6 +16,12 @@ io.sockets.on('connection', (socket) => {
     });
 
     socket.on('mesajGonder', (data) => {
-        socket.broadcast.emit('mesajCanli', data);
+        socket.to(data.room).emit("mesajCanli", data);
+    });
+
+    socket.on('joinRoom', (data) => {
+        socket.join(data.room, () => {
+            console.log("\"" + data.name + "\" adlı kullanıcı " + data.room + " adlı odaya katıldı.");
+        });
     });
 });

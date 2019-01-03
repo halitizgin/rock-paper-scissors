@@ -10,10 +10,12 @@
     <script>
         const socket = io.connect("http://localhost:3000/");
         const isim = prompt("İsmini gir!");
+        const oda = prompt("Oda ismini gir!");
         $(() => {
+            socket.emit('joinRoom', { name: isim, room: oda, message: $('#message').val() });
             $('button').on('click', () => {
-                socket.emit('mesajGonder', { name: isim, message: $('#message').val() });
-                $('#chat').append("<div><span class='name'>" + isim + ": </span><span class='message'>" + $('#message').val() + "</span> </div>");
+                socket.emit('mesajGonder', { name: isim, room: oda, message: $('#message').val() });
+                $('#chat').append("<div><span class='name'>" + isim + ": </span><span class='message'>" + $('#message').val() + "</span> <span class='room'>" + oda + "</span> </div>");
                 $('#message').val("");
             });
 
@@ -32,6 +34,10 @@
         #chat div span.name{
             font-weight: bold;
             color: #000000;
+        }
+
+        #chat div span.room{
+            float: right;
         }
     </style>
 </head>
